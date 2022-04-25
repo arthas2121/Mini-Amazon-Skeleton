@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>History of Order for Seller {{name}}</h1>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Buyer Information</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Final Price</th>
+      <th scope="col">Purchase Time</th>
+      <th scope="col">Fulfillment</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order in orders%}
+      <tr>
+        <td>{{order.pid}}</td>
+        <td>{{order.product_name}}</td>
+        <td><form action="{{ url_for('users.seller_view_buyer', uid=order[1]) }}" method="POST">
+          <button class = "button" type="submit">Buyer Detail</button>
+        </form></td>
+        <td>{{order.quantity}}</td>
+        <td>{{order.price}}</td>
+        <td>{{order.time_purchased}}</td>
+        <td>{{order.fulfilled}}</td>
+        <td><form action="{{ url_for('users.update_order_fulfillment', order=order.id) }}" method="POST">
+          <button class = "button" type="submit" id="fulfill">Fulfill</button>
+        </form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
+<a class="btn btn-black" href="{{ url_for('users.view_order_analytics')}}" role="button">Analytics</a>
+<a class="btn btn-black" href="{{ url_for('users.view_inventory')}}" role="button">Back</a>
+
+{% endblock %}

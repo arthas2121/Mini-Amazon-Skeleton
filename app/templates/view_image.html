@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Image for product {{pid}} from User {{uid}}</h1>
+
+
+{% if filename %}
+<div>
+    <image src=" {{url_for('users.display_image', filename = filename) }}">
+</div>
+{% endif %}
+
+<a href="{{ url_for('products.product', id = pid) }}">Back</a>
+
+
+<br>
+{% endblock %}
+

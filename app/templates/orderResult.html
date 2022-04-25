@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="main">
+    {% if status == -1 %}
+        <h2 style="margin-top: 2vh; margin-bottom: 2vh;">Your balance is not enough. Please add balance and try again!</h2>
+    {% elif status == -2 %}
+        <h2 style="margin-top: 2vh; margin-bottom: 2vh;">One or more products in your cart is out of stock. Please check again!</h2>
+    {% elif status == 0 %}
+        <h2 style="margin-top: 2vh; margin-bottom: 2vh;">Your order has been submitted successfully!</h2> 
+    {% endif %}
+    <form action="{{ url_for('userCart.cartPage') }}" method="GET">
+        <button class = "btn btn-outline-primary inner_button" type="submit">Return to Cart</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
+<h2>Product categories available:</h2>
+<div class="card-deck">
+  {% for cat in categories %}
+    <div class="card">
+      <div class="card-body" onclick=window.location.href="{{ url_for('products.productSummary', category=cat.name, search='...', sort_by='none') }}">
+        <h5 class="card-title">{{cat.name}}</h5>
+        <p class="card-text">{{cat.description}}</p>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<br>
+
+{% if current_user.is_authenticated %}
+<h2>Your recent purchases:</h2>
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product Name</th>
+      <th scope="col">Seller Name</th>
+      <th scope="col">Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for order, purchased_product, seller in purchase_history%}
+      <tr>
+        <th scope="row">{{purchased_product.name}}</th>
+        <td><a href="{{ url_for('users.public_view', uid = seller.id)}}" role="button">{{seller.firstname}} {{seller.lastname}}</a></td>
+        <td>{{order.time_purchased}}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p><a href = "{{ url_for('purchase_history.show_all_history') }}" role = "button">View All Purchase History</a></p>
+<p><a href = "{{ url_for('users.all_product_review', uid = current_user.id)}}" role = "button">My Review for All Products</a></p> 
+<p><a href = "{{ url_for('users.all_seller_review', uid = current_user.id)}}" role = "button">My Review for All Sellers</a></p>
+{% else %}
+<p><a href="{{ url_for('users.login') }}">Log in</a> to see your purchase history!</p>
+{% endif %}
+
+<br>
+
+{% endblock %}

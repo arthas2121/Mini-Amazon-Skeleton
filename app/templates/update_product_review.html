@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Update Review for Product {{pid}}</h1>
+
+<a href="{{ url_for('users.all_product_review', uid = uid )}}">Back</a>
+<br /><br />
+
+<form action="" method="post">
+    {{form.hidden_tag()}}
+    <p>{{form.description.label}}<br/>
+        {{form.description(size=64)}}<br/>
+        {{form.rating.label}}<br/>
+        {{form.rating(size=32)}}<br/>
+    </p>
+    <p>{{form.submit(class = "btn btn-secondary")}}</p>
+</form>
+
+<a href="/all_product_review/{{uid}}/remove/{{pid}}">Remove Current Review</a>
+
+
+<br />
+
+{% endblock %}

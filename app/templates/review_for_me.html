@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Reviews For Me</h1>
+
+<a href="{{ url_for('index.index') }}">Home</a>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<form action="" method="post" id="category-dropdown">
+    <div class="nav-left">
+      <span class="nav-search-label" id="category-chosen" name ="dropDownSort">Sort By:</span>
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+      {{form.hidden_tag()}}
+      <p>
+          {{form.myField()}}
+      </p>
+      <p>{{ form.submit() }}</p>
+    </div>
+  </form>
+  
+
+<h3> All Reviews</h3>
+
+<table class = 'table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col"> Buyer id</th>
+            <th scope="col"> Rating</th>
+            <th scope="col"> Comment</th>
+            <th scope="col"> Date</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in all_reviews %}
+        <tr>
+            <th scope="col"><a href="{{ url_for('users.public_view', uid = review.uid)}}">{{review.uid}}</a></th>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.review_time}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}

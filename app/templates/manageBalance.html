@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Manage Balance</h1>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<p>Your current balance is ${{ current }}</p>
+
+<a class="btn btn-black" href="{{ url_for('users.deposit') }}" role="button">Deposit</a>
+<a class="btn btn-black" href="{{ url_for('users.withdraw') }}" role="button">Withdraw</a>
+<p></p>
+<a class="btn btn-secondary" href="{{ url_for('index.index') }}" role="button">Back</a>
+  
+{% endblock %}

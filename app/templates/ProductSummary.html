@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div style=" margin-top: 1%; padding: 1%;">
+  <form class="form-inline" action="{{ url_for('products.productSummary', category=category, search=search, sort_by='None')}}" method="post">
+    <input class="form-control mr-sm-2" type="search" name='search' id='search' aria-label="Search">
+    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+  </form>
+  <div class="btn-group" role="group" style="margin-top: 1%;">
+  <button type="button" class="btn btn-primary dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort by price</button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="{{ url_for('products.productSummary', category=category, search='...', sort_by='Asc')}}">Asc</a>
+    <a class="dropdown-item" href="{{ url_for('products.productSummary', category=category, search='...', sort_by='Desc')}}">Desc</a>
+  </div>
+  </div>
+
+  <div class="btn-group" role="group" style="margin-top: 1%;">
+    <button type="button" class="btn btn-info dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort by quantity</button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <a class="dropdown-item" href="{{ url_for('products.productSummary', category=category, search='...', sort_by='quantity_asc')}}">Asc</a>
+      <a class="dropdown-item" href="{{ url_for('products.productSummary', category=category, search='...', sort_by='quantity_desc')}}">Desc</a>
+    </div>
+    </div>
+
+  <div class="btn-group" role="group" style="margin-top: 1%">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Filter by Category
+  </button>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    {% for cat in categories %}
+    <a class="dropdown-item" href="{{ url_for('products.productSummary', category=cat.name, search='...', sort_by='none')}}">{{cat.name}}</a>
+    {% endfor %}
+  </div>
+  </div>
+
+</div>
+
+{%if products != None %}
+<div class="card-deck">
+    {% for p in products %}
+        <div class="card text-center" style="min-width: 18rem; max-width: 20rem; margin: 1rem">
+        <div style="width:100%; text-align:center">
+          <img  style="max-width: 75%; height: auto; " src="{{p.image}}" alt="">
+        </div>
+        <div class="card-body" onclick=window.location.href="{{ url_for('products.product', id=p.pid)}}">
+            <h5 class="card-title">{{p.name}}</h5>
+            {% if p.total_quantity > 0 %}
+              <p class="card-text" style="color:green"> In Stock <small class="text-muted">{{p.seller_num}} seller(s)</small></p> 
+              <p class="card-text">Average Price: {{p.avg_price}}</p>
+              <p class="card-text">Total Quantity: {{p.total_quantity}}</p>
+            {% else %}
+              <p class="card-text" style="color:red"> Out of Stock </p>
+            {% endif %}
+            <p class="card-text"><small>{{p.description}}</small></p>     
+        </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %} 

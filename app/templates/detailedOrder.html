@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Order Detail</h1>
+
+<form>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.name.label }}<br/>
+        {{ form.name(size=40) }}<br/>
+    </p>
+    <p>
+        {{ form.product.label }}<br/>
+        {{ form.product(size=32) }}<br/>
+    </p>
+    <p>
+        {{ form.unit_price.label }}<br/>
+        {{ form.unit_price }}<br/>
+    </p>
+    <p>
+        {{ form.quantity.label }}<br/>
+        {{ form.quantity }}<br/>
+    </p>
+    <p>
+        {{ form.fulfillment.label }}<br/>
+        {{ form.fulfillment }}<br/>
+    </p>
+    <p>
+        {{ form.time.label }}<br/>
+        {{ form.time(size=32) }}<br/>
+    </p>
+</form>
+  
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Inventory for {{name}}</h1>
+
+<h2>Current Selling Products</h2>
+
+<div style=" margin-bottom: 1%; padding: 1%;">
+  <form class="form-inline" action="{{ url_for('users.inventory_search')}}" method="post">
+    <input class="form-control mr-sm-2" type="search" name='search' id='search' aria-label="Search">
+    <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search by Product Name</button>
+  </form>
+</div>
+
+<table class='table table-hover table-bordered container'>
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Product ID</th>
+      <th scope="col">Product Name</th>
+      <th scope="col">Unit Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Change Quantity</th>
+      <th scope="col">Edit Product</th>
+      <th scope="col">Remove Products</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products%}
+      <tr>
+        <th scope="row">{{product.pid}}</th>
+        <td>{{product.pname}}</td>
+        <td>{{product.price}}</td>
+        <td>{{product.quantity}}</td>
+        <td><form action="{{ url_for('users.change_quantity_by_new', pid=product.pid) }}" method="POST">
+          <label for="quantity">New Quantity:</label>
+          <input type="number" id="quantity" name="quantity" required step=1 min=1 >
+          <input type="submit" value="Update">
+      </form></td>
+      <td><form action="{{ url_for('users.edit_product', uid=current_user.id, pid=product.pid) }}" method="POST">
+        <button class = "button" type="submit">Edit</button>
+      </form></td>
+      <td><form action="{{ url_for('users.inventory_product_removal_by_pid', pid=product.pid) }}" method="POST">
+        <button class = "button" type="submit">Delete</button>
+      </form></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="btn btn-black" href="{{ url_for('users.view_inventory_analytics')}}" role="button">Analytics</a>
+<a class="btn btn-black" href="{{ url_for('products.createProduct')}}" role="button">Add Products</a>
+<a class="btn btn-black" href="{{ url_for('users.view_history_of_orders')}}" role="button">Order History</a>
+
+
+<p>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+</p>
+
+{% endblock %}

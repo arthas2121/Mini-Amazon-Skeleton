@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Public Profile</h1>
+
+<form>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.id.label }}<br/>
+        {{ form.id }}<br/>
+    </p>
+    <p>
+        {{ form.firstname.label }}<br/>
+        {{ form.firstname(size=32) }}<br/>
+    </p>
+    <p>
+        {{ form.lastname.label }}<br/>
+        {{ form.lastname(size=32) }}<br/>
+    </p>
+</form>
+  
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>User {{uid}} Upload a image for product {{pid}}</h1>
+
+<a href="{{ url_for('users.all_product_review', uid = uid )}}">Back</a>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<h4>Select a image to upload (PNG, JPG, JPEG, GIF extensions allowed)</h4>
+<form method = "POST" action = "/upload-image/{{uid}}/{{pid}}" enctype = "multipart/form-data">
+    
+    <div class = "form-group">
+        <label>Select image</label>
+        <div class = "custom-file">
+            <input type = "file" class = "custom-file-input" name = "image" id = "image">
+            <label class = "custom-file-label" for = "image">Select image ...</label>
+            </div>
+        </div>
+
+        <button type = "submit" class="btn btn-primary">Upload Image</button>
+</form>
+
+<br>
+
+{% if filename %}
+<h4>Current Image:</h4>
+<div>
+    <image src=" {{url_for('users.display_image', filename = filename) }}">
+</div>
+{% endif %}
+
+<br>
+{% endblock %}
+

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>All Reviews for Sellers</h1>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<table class ='table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col">Seller id</th>
+            <th scope="col">Rating</th>
+            <th scope="col">Description</th>
+            <th scope="col">Review_Time</th>
+            <th scope="col">Update Review</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td><a href="{{ url_for('users.public_view', uid = review.sid)}}">{{review.sid}}</a></td>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.review_time}}</td>
+            <td><a href="{{ url_for('users.update_seller_review', uid = current_user.id, sid = review.sid)}}" role="button">Update Review</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

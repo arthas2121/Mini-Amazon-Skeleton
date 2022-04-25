@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Purchase History Filtered by Date</h1>
+
+<br>
+
+<div class="dropdown" >
+  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Filter by Order Date
+  </button>
+  <a class="btn btn-secondary" href="{{ url_for('purchase_history.show_all_history') }}" role="button">Back</a>
+
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="{{ url_for('purchase_history.show_history_by_date', time_interval='week')}}">Last week</a>
+    <a class="dropdown-item" href="{{ url_for('purchase_history.show_history_by_date', time_interval='month')}}">Last month</a>
+    <a class="dropdown-item" href="{{ url_for('purchase_history.show_history_by_date', time_interval='halfyear')}}">Last half year</a>
+    <a class="dropdown-item" href="{{ url_for('purchase_history.show_history_by_date', time_interval='year')}}">Last year</a>
+  </div>
+</div>
+
+<br>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Product Name</th>
+        <th scope="col">Seller Name</th>
+        <th scope="col">Unit price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Fulfillment</th>
+        <th scope="col">Time</th>
+        <th scope="col">Order</th>
+        <th scope="col">Review Product</th>
+        <th scope="col">Review Seller</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for order, purchased_product, seller in purchase_history%}
+        <tr>
+          <td>{{purchased_product.name}}</td>
+          <td><a href="{{ url_for('users.public_view', uid = seller.id)}}" role="button">{{seller.firstname}} {{seller.lastname}}</a></td>
+          <td>$ {{order.price}}</td>
+          <td>{{order.quantity}}</td>
+          <td>{{order.fulfilled}}</td>
+          <td>{{order.time_purchased}}</td>
+          <td><a href="{{ url_for('purchase_history.order_detail', id = order.id)}}" role="button">Detail</a></td>
+          <td><a href="{{ url_for('users.product_review', pid = order.pid)}}" role="button">Review Product</a></td>
+          <td><a href="{{ url_for('users.seller_review', sid = order.seller)}}" role="button">Review Seller</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

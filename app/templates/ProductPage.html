@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="width:40%; float: right">
+    <h3>Buy this product from the following sellers!</h3>
+    {% if productsummary.total_quantity > 0 %}
+    
+          {% for seller, seller_avg in sellers_total %}
+            <div> 
+              <a href="{{ url_for('users.public_view', uid = seller.sid)}}">{{seller.firstname}} {{seller.lastname}}</a>
+              <small class="text-muted">(Price: {{seller.price}}; Quantity: {{seller.quantity}}; Average Rating: {{seller_avg}})</small></a>            
+              <form action="{{ url_for('userCart.add_to_cart', uid=current_user.id, pid=product.id, sid=seller.sid) }}" method="POST">
+                <input type="number" id="quantity" name="quantity" requiredmin="1" max="{{seller.quantity}}">
+                <input type="submit" value="Add to Cart">
+              </form>
+            </div>
+    
+          {% endfor %}
+    {% else %}
+        <div>
+            No current listings
+        </div>
+    {% endif %}
+    {% for mesg in get_flashed_messages() %}
+        <p>{{ mesg }}</p>
+    {% endfor %}
+</div>
+<div style="width: 50%; text-align: center; float: center; margin-top: 1%">
+    <h2 style="text-align: center;"> {{product.name}} </h2>
+        <img style="text-align: center;" src="{{product.image}}">
+        <div style="text-align: center;">
+		<h5>Category: <a href="{{ url_for('products.productSummary', category=product.category, search='...', sort_by='none')}}">{{product.category}}</a></h5>
+        {% if productsummary.total_quantity > 0 %}
+            <h5 style="color:green"> In Stock <small class="text-muted">{{productsummary.seller_num}} seller(s)</small></h5> 
+            <h5>Average Price: {{productsummary.avg_price}}</h5>
+        {% else %}
+            <h5 style="color:red"> Out of Stock </h5>
+        {% endif %}
+        <h5>Average Rating: {{avg_rating}} / 5.0 <br /> Number of Reviews: {{review_cnt}}</h5>
+		<h5>Description: {{product.description}}</h5>
+        </div>
+</div>
+  <br /> <br />
+<h2> Top 3 Positive Reviews</h2>
+<table class = 'table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col"> Buyer id</th>
+            <th scope="col"> Rating</th>
+            <th scope="col"> Comment</th>
+            <th scope="col"> Date</th>
+            <th scope="col"> Likes</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in pos_reviews %}
+        <tr>
+            <th scope="col"><a href="{{ url_for('users.public_view', uid = review.uid)}}">{{review.uid}}</a></th>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.review_time}}</td>
+            <td>{{review.like_num}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form action="" method="post" id="category-dropdown">
+    <div class="nav-left">
+      <span class="nav-search-label" id="category-chosen" name ="dropDownSort">Sort By:</span>
+      <i class="fa fa-caret-down" aria-hidden="true"></i>
+      {{form.hidden_tag()}}
+      <p>
+          {{form.myField()}}
+      </p>
+      <p>{{ form.submit() }}</p>
+    </div>
+  </form>
+  
+
+<h3> All Reviews</h3>
+
+<table class = 'table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col"> Buyer id</th>
+            <th scope="col"> Rating</th>
+            <th scope="col"> Comment</th>
+            <th scope="col"> Date</th>
+            <th scope="col"> Likes</th>
+            {% if current_user.is_authenticated %}
+            <th scope="col">Like</th>
+            <th scope="col">Dislike</th>
+            {% endif %}
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in all_reviews %}
+        <tr>
+            <th scope="col"><a href="{{ url_for('users.public_view', uid = review.uid)}}">{{review.uid}}</a></th>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.review_time}}</td>
+            <td>{{review.like_num}}</td>
+            <td><a href="/ProductPage/{{product.id}}/like/{{review.uid}}">Like</a></td>
+            <td><a href="/ProductPage/{{product.id}}/dislike/{{review.uid}}">Dislike</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<h3> All Reviews with Image</h3>
+
+<table class = 'table table-hover table-bordered container'>
+    <thread class="thead-dark">
+        <tr>
+            <th scope="col"> Buyer id</th>
+            <th scope="col"> Rating</th>
+            <th scope="col"> Comment</th>
+            <th scope="col"> Date</th>
+            <th scope="col"> Likes</th>
+            {% if current_user.is_authenticated %}
+            <th scope="col">Like</th>
+            <th scope="col">Dislike</th>
+            {% endif %}
+            <th scope="col">See Image</th>
+        </tr>
+    </thread>
+    <tbody>
+        {% for review in image_reviews %}
+        <tr>
+            <th scope="col"><a href="{{ url_for('users.public_view', uid = review.uid)}}">{{review.uid}}</a></th>
+            <td>{{review.rating}}</td>
+            <td>{{review.description}}</td>
+            <td>{{review.review_time}}</td>
+            <td>{{review.like_num}}</td>
+            <td><a href="/ProductPage/{{product.id}}/like/{{review.uid}}">Like</a></td>
+            <td><a href="/ProductPage/{{product.id}}/dislike/{{review.uid}}">Dislike</a></td>
+            <td><a href="/ProductPage/{{product.id}}/{{review.uid}}/show-image">See Image</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br />
+{% endblock %}

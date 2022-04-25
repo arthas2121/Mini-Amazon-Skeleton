@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="main">
+    <h2 style="margin-top: 2vh; margin-bottom: 2vh;">{{ current_user.firstname }}'s Cart:</h2>
+    <table class='table table-hover table-bordered container'>
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Seller ID</th>
+            <th scope="col">Product ID</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Update Quantity</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for cart in user_cart %}
+                <tr>
+                    <onclick="window.location.href='{{ url_for('products.product', id = cart.pid)}}'">
+                    <td><a href="{{ url_for('users.public_view', uid = cart.sid)}}">{{cart.sid}}</a></td>
+                    <td>{{ cart.pid }}</td>
+                    <td>{{ cart.quantity}}</td>
+                    <td>{{ cart.price}}</td>
+                    <td><form action="{{ url_for('userCart.update_quantity', uid=cart.uid, sid=cart.sid, pid=cart.pid) }}" method="POST">
+                        <label for="quantity">New Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" required step=1 min=1 >
+                        <input type="submit" value="Update">
+                    </form></td>
+                    <td><form action="{{ url_for('userCart.delete_item', uid=cart.uid, sid=cart.sid, pid=cart.pid) }}" method="POST">
+                        <button class = "button" type="submit">Delete</button>
+                    </form></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div>
+    <h5 style="margin-top: 1%;">Apply Promotional Code:</h5>
+    <form class="form-inline" method="post" action="{{ url_for('userCart.apply_promotional_code', uid=current_user.id) }}">
+        <input class="form-control mr-sm-2" name="code" id="code" aria-label="Code">
+        <button class="btn btn-primary my-2 my-sm-0" type="submit">Apply</button>
+    </form>
+    </div>
+    <div>
+    <h5 style="margin-top: 1%;">Remove Promotional Code:</h5>
+    <form class="form-inline" action="{{ url_for('userCart.cancel_code', uid=current_user.id) }}" method="POST" style="margin-top: 1%;">
+        <input class="form-control mr-sm-2" name="remove_code" id="remove_code" aria-label="RemoveCode"> 
+        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Remove</button> 
+    </form>
+    </div>
+    {% for mesg in get_flashed_messages() %}
+            <p>{{ mesg }}</p>
+        {% endfor %}
+    <h5 style="margin-top: 1%;">Total Price: <b>{{ total_price }}</b></h5>
+    <form action="{{ url_for('userCart.submit_order', id=current_user.id) }}" method="POST">
+        <button class = "btn btn-outline-success inner_button" type="submit">Submit Order</button>
+    </form>
+</div>
+{% endblock %}

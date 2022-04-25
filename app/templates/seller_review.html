@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Review for {{sid}}</h1>
+
+<p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</p>
+
+<form action="" method="post">
+    {{form.hidden_tag()}}
+    <p>{{form.description.label}}<br/>
+        {{form.description(size=64)}}<br/>
+        {{form.rating.label}}<br/>
+        {{form.rating(size=32)}}<br/>
+    </p>
+    <p>{{form.submit(class = "btn btn-secondary")}}</p>
+</form>
+
+
+<br>
+{% endblock %}

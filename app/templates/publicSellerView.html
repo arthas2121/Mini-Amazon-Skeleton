@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Public Profile</h1>
+
+<form>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.id.label }}<br/>
+        {{ form.id }}<br/>
+    </p>
+    <p>
+        {{ form.firstname.label }}<br/>
+        {{ form.firstname(size=32) }}<br/>
+    </p>
+    <p>
+        {{ form.lastname.label }}<br/>
+        {{ form.lastname(size=32) }}<br/>
+    </p>
+
+    <br>
+
+    <h3>This user is also a seller.</h3>
+
+    <p>
+        {{ form.email.label }}<br/>
+        {{ form.email(size=64) }}<br/>
+    </p>
+    <p>
+        {{ form.address.label }}<br/>
+        {{ form.address(size=64) }}<br/>
+    </p>
+</form>
+
+<p>All reviews for this seller:</p>
+
+<table class='table table-hover table-bordered container'>
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Buyer id</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Description</th>
+        <th scope="col">Review time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for review in reviews%}
+        <tr>
+          <td>{{review.uid}}</td>
+          <td>{{review.rating}}</td>
+          <td>{{review.description}}</td>
+          <td>{{review.review_time}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}
